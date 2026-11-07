@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRITICAL SYSTEM BREACH - CRACK'S RAT V9.4</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Share Tech Mono & Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Tone.js for Sound Effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <style>
+        body {
+            font-family: 'Tajawal', 'Share Tech Mono', monospace;
+            background-color: #030303;
+            color: #ff0033;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        .mono {
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        /* CRT Screen Scanline Overlay */
+        .scanlines {
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%,
+                rgba(0, 0, 0, 0.35) 50%
+            ), linear-gradient(
+                90deg,
+                rgba(255, 0, 0, 0.03),
+                rgba(0, 255, 0, 0.01),
+                rgba(0, 0, 255, 0.03)
+            );
+            background-size: 100% 3px, 6px 100%;
+            pointer-events: none;
+        }
+
+        /* Glitch Animation Effects */
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+        }
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            clip: rect(0, 0, 0, 0);
+        }
+        .glitch-text::before {
+            left: -2px;
+            text-shadow: 2px 0 #ff0055;
+            animation: glitch-anim-1 2s infinite linear alternate-reverse;
+        }
+        .glitch-text::after {
+            left: 2px;
+            text-shadow: -2px 0 #00ffff;
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim-1 {
+            0% { clip: rect(20px, 9999px, 15px, 0); }
+            20% { clip: rect(50px, 9999px, 70px, 0); }
+            40% { clip: rect(10px, 9999px, 85px, 0); }
+            60% { clip: rect(80px, 9999px, 5px, 0); }
+            80% { clip: rect(35px, 9999px, 60px, 0); }
+            100% { clip: rect(90px, 9999px, 30px, 0); }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(85px, 9999px, 10px, 0); }
+            20% { clip: rect(15px, 9999px, 40px, 0); }
+            40% { clip: rect(65px, 9999px, 20px, 0); }
+            60% { clip: rect(30px, 9999px, 95px, 0); }
+            80% { clip: rect(75px, 9999px, 50px, 0); }
+            100% { clip: rect(5px, 9999px, 80px, 0); }
+        }
+
+        /* Horror Pulse & Flicker */
+        @keyframes horror-flicker {
+            0%, 100% { opacity: 1; }
+            3% { opacity: 0.4; }
+            6% { opacity: 1; }
+            7% { opacity: 0.2; }
+            8% { opacity: 0.9; }
+            9% { opacity: 0%; }
+            10% { opacity: 1; }
+            89% { opacity: 1; }
+            90% { opacity: 0.2; }
+            92% { opacity: 1; }
+        }
+
+        .flicker {
+            animation: horror-flicker 4s infinite;
+        }
+
+        @keyframes screen-shake {
+            0% { transform: translate(0, 0); }
+            20% { transform: translate(-5px, 5px); }
+            40% { transform: translate(-5px, -5px); }
+            60% { transform: translate(5px, 5px); }
+            80% { transform: translate(5px, -5px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        .shake {
+            animation: screen-shake 0.15s infinite;
+        }
+
+        /* Red Flashing Alarm background for final destruction */
+        @keyframes alarm-flash {
+            0%, 100% { background-color: #000000; }
+            50% { background-color: #3b0000; }
+        }
+
+        .alarm-mode {
+            animation: alarm-flash 0.4s infinite;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ff0033;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative flex flex-col justify-between overflow-x-hidden bg-black select-none">
+
+    <!-- CRT Overlay Layer -->
+    <div class="scanlines fixed inset-0 z-50 pointer-events-none"></div>
+
+    <!-- Background Glitch Matrix Canvas -->
+    <canvas id="matrixCanvas" class="fixed inset-0 opacity-25 z-0 pointer-events-none"></canvas>
+
+    <!-- MAIN DASHBOARD (HACKED INTERFACE) - OPACITY REMOVED FOR IMMEDIATE DISPLAY -->
+    <div id="mainDashboard" class="relative z-10 flex-grow flex flex-col justify-between p-4 md:p-8 max-w-7xl mx-auto w-full">
+
+        <!-- TOP BAR: Header Info -->
+        <header class="border-b-2 border-red-600/60 pb-4 mb-6 flex flex-wrap items-center justify-between gap-4 bg-black/60 p-4 rounded-t-lg backdrop-blur shadow-[0_0_15px_rgba(255,0,0,0.2)]">
+            <div class="flex items-center gap-3">
+                <span class="w-4 h-4 rounded-full bg-red-600 animate-ping"></span>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-black text-red-500 tracking-wider mono glitch-text" data-text="CRACK'S RAT V9.4 - EXPLOIT ACTIVE">
+                        CRACK'S RAT V9.4 - EXPLOIT ACTIVE
+                    </h1>
+                    <p class="text-xs text-red-400/80 mono">STATUS: ROOT ACCESS GRANTED | IP LOGGED</p>
+                </div>
+            </div>
+
+            <div class="text-left dir-ltr mono bg-red-950/40 p-2 border border-red-800/50 rounded">
+                <div class="text-xs text-red-400">YOUR TARGET IP:</div>
+                <div id="userIp" class="text-sm font-bold text-red-200">192.168.1.104 (FETCHING...)</div>
+            </div>
+        </header>
+
+        <!-- MAIN GRID CONTENT -->
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-6 my-auto">
+
+            <!-- LEFT PANEL: Ransomware Threat & Timer -->
+            <div class="lg:col-span-1 bg-red-950/20 border border-red-600/50 p-6 rounded-xl flex flex-col justify-between shadow-[0_0_25px_rgba(255,0,0,0.15)] relative overflow-hidden group">
+                <div class="absolute -right-10 -bottom-10 opacity-10 pointer-events-none">
+                    <svg class="w-64 h-64 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm0-7a1 1 0 10-2 0v3a1 1 0 102 0V7z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+
+                <div>
+                    <div class="inline-block px-3 py-1 bg-red-600 text-black text-xs font-black uppercase rounded mb-3">
+                        CRITICAL ALARM: SYSTEM LOCKDOWN
+                    </div>
+                    <h2 class="text-xl font-bold text-red-400 mb-2">تم اختراق وتشفير كافة بيانات جهازك!</h2>
+                    <p class="text-xs text-gray-300 leading-relaxed mb-4">
+                        لقد وقعت في فخ ثغرة <span class="text-red-500 font-bold">Zero-Day Remote Code Execution</span>. تم سحب الملفات، الكاميرات، الحسابات البنكية ومفاتيح التشفير إلى سيرفرنا المظلم.
+                    </p>
+                </div>
+
+                <!-- TIMER BOX -->
+                <div class="my-4 p-4 bg-black/80 border border-red-500/80 rounded-lg text-center">
+                    <div class="text-xs text-gray-400 mb-1">الوقت المتبقي قبل حذف البيانات نهائياً:</div>
+                    <div id="countdownTimer" class="text-4xl font-black text-red-500 mono tracking-widest flicker">
+                        00:00:03
+                    </div>
+                </div>
+
+                <div class="space-y-2 text-xs text-red-300">
+                    <div class="flex justify-between border-b border-red-900/40 pb-1">
+                        <span>حالة الكاميرا:</span>
+                        <span class="text-green-500 font-bold animate-pulse">RECORDING LIVE [REC]</span>
+                    </div>
+                    <div class="flex justify-between border-b border-red-900/40 pb-1">
+                        <span>موقعك الجغرافي:</span>
+                        <span id="geoLoc" class="text-red-400">مكتشف (مصر / القاهرة)</span>
+                    </div>
+                    <div class="flex justify-between border-b border-red-900/40 pb-1">
+                        <span>الميكروفون:</span>
+                        <span class="text-red-500 font-bold">STREAMING AUDIO</span>
+                    </div>
+                </div>
+
+                <button id="panicBtn" class="mt-6 w-full py-3 bg-red-600/20 hover:bg-red-600 border border-red-500 text-red-400 hover:text-black font-bold text-sm rounded transition duration-200">
+                    [ محاولة إيقاف الاختراق ]
+                </button>
+            </div>
+
+            <!-- CENTER & RIGHT PANEL: Live Console & Hijacked Media -->
+            <div class="lg:col-span-2 space-y-6 flex flex-col">
+
+                <!-- TERMINAL CONSOLE -->
+                <div class="bg-black/90 border border-red-600/60 rounded-xl p-4 flex-1 flex flex-col font-mono text-xs shadow-[0_0_20px_rgba(255,0,0,0.1)]">
+                    <div class="flex items-center justify-between border-b border-red-900/60 pb-2 mb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-red-600"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-600"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-600"></span>
+                            <span class="text-gray-400 ml-2">RAT Payload Execution Console</span>
+                        </div>
+                        <span class="text-red-500 text-[10px]">ENCRYPTED PORT: 6666</span>
+                    </div>
+
+                    <div id="terminalLog" class="flex-1 overflow-y-auto max-h-56 space-y-2 p-2 dir-ltr text-left text-red-400/90 leading-relaxed">
+                        <p class="text-gray-500">[SYSTEM START] Initializing Crack's RAT payload...</p>
+                        <p class="text-green-400">[SUCCESS] Hooked browser process (PID: 8492)</p>
+                        <p class="text-yellow-400">[EXPLOIT] Extracting Chrome stored passwords...</p>
+                    </div>
+                </div>
+
+                <!-- HIJACKED DATA PREVIEW CARDS -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    <!-- Exfiltrated Accounts Card -->
+                    <div class="bg-red-950/20 border border-red-800/40 p-4 rounded-xl">
+                        <h3 class="text-sm font-bold text-red-400 mb-3 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                            الحسابات المسربة فوراً:
+                        </h3>
+                        <ul class="space-y-2 text-xs text-gray-300 mono dir-ltr">
+                            <li class="flex justify-between bg-black/40 p-2 rounded border border-red-950">
+                                <span>Facebook Session:</span>
+                                <span class="text-red-500 font-bold">[STOLEN]</span>
+                            </li>
+                            <li class="flex justify-between bg-black/40 p-2 rounded border border-red-950">
+                                <span>Google / Gmail Tokens:</span>
+                                <span class="text-red-500 font-bold">[STOLEN]</span>
+                            </li>
+                            <li class="flex justify-between bg-black/40 p-2 rounded border border-red-950">
+                                <span>WhatsApp Web Session:</span>
+                                <span class="text-red-500 font-bold">[CLONED]</span>
+                            </li>
+                            <li class="flex justify-between bg-black/40 p-2 rounded border border-red-950">
+                                <span>Bank / Credit Cards:</span>
+                                <span class="text-red-500 font-bold">[EXFILTRATING...]</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Webcam Mock Visualizer -->
+                    <div class="bg-red-950/20 border border-red-800/40 p-4 rounded-xl flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-sm font-bold text-red-400 mb-2 flex items-center justify-between">
+                                <span>بث الكاميرا المباشر</span>
+                                <span class="w-2 h-2 rounded-full bg-red-600 animate-ping"></span>
+                            </h3>
+                            <div class="relative aspect-video bg-black rounded border border-red-600/40 overflow-hidden flex items-center justify-center">
+                                <!-- Scary Shadow/Face Placeholder -->
+                                <div class="absolute inset-0 bg-gradient-to-t from-red-950/60 to-transparent"></div>
+                                <svg class="w-24 h-24 text-red-900/40 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                                </svg>
+                                <div class="absolute bottom-2 left-2 text-[10px] text-red-500 mono bg-black/80 px-2 py-0.5 rounded">
+                                    WEBCAM_DEV_0: CAPTURING...
+                                </div>
+                                <div class="absolute top-2 right-2 text-[10px] text-green-400 mono">
+                                    FPS: 60 | 1080p
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+        <!-- FOOTER WARNING -->
+        <footer class="mt-6 border-t border-red-900/40 pt-4 flex flex-wrap justify-between items-center text-xs text-red-500/70">
+            <div class="mono">SYSTEM ID: #994-ERR-DARK-RAT</div>
+            <div>أي محاولة لإغلاق المتصفح ستؤدي فوراً إلى تدمير القرص الصلب (Hard Disk Destruction)</div>
+        </footer>
+
+    </div>
+
+    <!-- JUMPSCARE / SCREAM OVERLAY CONTAINER (TRIGGERED ON PANIC OR CLICKS) -->
+    <div id="horrorOverlay" class="fixed inset-0 z-50 bg-red-950 bg-opacity-95 hidden flex-col items-center justify-center text-center p-4">
+        <h1 class="text-5xl md:text-8xl font-black text-red-600 glitch-text tracking-widest mb-2" data-text="TOO LATE">TOO LATE</h1>
+        <p class="text-xl md:text-3xl text-white font-black mb-4 animate-bounce">لقد قمت بتشغيل بروتوكول التدمير الذاتي!</p>
+
+        <div class="bg-black/90 border-2 border-red-600 p-6 rounded-xl max-w-xl w-full text-right shadow-[0_0_30px_rgba(255,0,0,0.5)] my-4">
+            <h3 class="text-sm font-bold text-red-400 mb-4 border-b border-red-800 pb-2 flex justify-between items-center dir-rtl">
+                <span>جارٍ تنفيذ مسح البيانات وتثبيت الاختراق الكامل:</span>
+                <span class="w-3 h-3 bg-red-600 rounded-full animate-ping"></span>
+            </h3>
+
+            <!-- Dynamic Hijack Log Stream -->
+            <div id="selfDestructLog" class="space-y-3 text-sm font-bold dir-rtl">
+                <p id="stepGeo" class="text-yellow-400 opacity-0 transition-opacity duration-300">📌 الموقع الجغرافي المحدد: <span class="text-white bg-red-900 px-2 py-0.5 rounded">حدائق الجيزة</span></p>
+                <p id="stepGoogle" class="text-red-400 opacity-0 transition-opacity duration-300">⚠️ [1] تم سحب حساب جوجل (Google Account Exfiltrated)</p>
+                <p id="stepFb" class="text-red-400 opacity-0 transition-opacity duration-300">⚠️ [2] تم سحب حساب فيسبوك (Facebook Session Hijacked)</p>
+                <p id="stepInsta" class="text-red-400 opacity-0 transition-opacity duration-300">⚠️ [3] تم سحب حساب إنستجرام (Instagram Credentials Stolen)</p>
+                <p id="stepWa" class="text-red-400 opacity-0 transition-opacity duration-300">⚠️ [4] تم سحب حساب واتساب (WhatsApp Web Cloned)</p>
+            </div>
+        </div>
+
+        <div class="w-20 h-20 border-4 border-red-600 border-t-transparent rounded-full animate-spin my-4"></div>
+        <p class="text-xs text-red-400 mono animate-pulse">FORMATTING ALL DRIVES & DELETING SYSTEM BIOS...</p>
+    </div>
+
+    <!-- FINAL TOTAL BLACKOUT ALARM SCREEN -->
+    <div id="blackoutScreen" class="fixed inset-0 z-[100] bg-black hidden flex-col items-center justify-center text-center p-6 select-none cursor-none">
+        <!-- PURE BLACKOUT SCREEN WITH NO UI ELEMENTS -->
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Matrix Canvas Effect
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const matrixChars = '☠☣⚡☠01010101CRACKSRATERRORSYSTEMHACKEDKILL999';
+        const fontSize = 14;
+        const columns = Math.floor(canvas.width / fontSize);
+        const drops = Array(columns).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#ff0033';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 33);
+
+        // Sound Effects with Tone.js
+        let synth, noiseSynth, alarmLoop;
+
+        function initAudio() {
+            // High pitch siren synth for terrifying horror alarm
+            synth = new Tone.Synth({
+                oscillator: { type: 'sawtooth' },
+                envelope: { attack: 0.05, decay: 0.1, sustain: 0.9, release: 0.5 }
+            }).toDestination();
+
+            // Noise for glitch sounds
+            noiseSynth = new Tone.NoiseSynth({
+                noise: { type: 'brown' },
+                envelope: { attack: 0.01, decay: 0.1, sustain: 0 }
+            }).toDestination();
+
+            Tone.Transport.bpm.value = 140;
+            Tone.Transport.start();
+        }
+
+        function playTerrifyingAlarm() {
+            if (!synth) return;
+            // Continuous piercing horror alert sound frequency toggling
+            let toggle = false;
+            setInterval(() => {
+                try {
+                    synth.triggerAttackRelease(toggle ? "F5" : "B4", "16n");
+                    toggle = !toggle;
+                } catch(e) {}
+            }, 120);
+        }
+
+        function playGlitchSound() {
+            if (noiseSynth) {
+                noiseSynth.triggerAttackRelease("16n");
+            }
+        }
+
+        // Live Log Generator
+        const terminalLog = document.getElementById('terminalLog');
+        const logsList = [
+            "[Ransomware] Encrypted 4,320 files in C:/Users/Documents",
+            "[Keylogger] Recording keystrokes: 'password123', 'admin'",
+            "[Webcam] Frame captured and uploaded to C2 Server",
+            "[Network] Spreading payload to local gateway (192.168.1.1)",
+            "[Audio] Recording background microphone stream...",
+            "[System] Disabling Windows Defender & Firewall...",
+            "[Credentials] Chrome Saved Passwords Extracted!",
+            "[Crypto] Searching for Bitcoin / Crypto Wallets..."
+        ];
+
+        function appendLog() {
+            const randomLog = logsList[Math.floor(Math.random() * logsList.length)];
+            const p = document.createElement('p');
+            p.className = 'text-red-400 border-l-2 border-red-600 pl-2 my-1';
+            p.innerText = `[${new Date().toLocaleTimeString()}] ${randomLog}`;
+            terminalLog.appendChild(p);
+            terminalLog.scrollTop = terminalLog.scrollHeight;
+            playGlitchSound();
+        }
+
+        // Countdown Timer
+        function startTimer() {
+            let totalSeconds = 3; // 3 seconds countdown
+            const timerEl = document.getElementById('countdownTimer');
+
+            const timerInterval = setInterval(() => {
+                totalSeconds--;
+                if (totalSeconds <= 0) {
+                    totalSeconds = 0;
+                    clearInterval(timerInterval);
+
+                    // Trigger Horror Jumpscare / Lockdown Overlay when timer hits 0
+                    triggerSelfDestruct();
+                }
+
+                const hrs = Math.floor(totalSeconds / 3600);
+                const mins = Math.floor((totalSeconds % 3600) / 60);
+                const secs = totalSeconds % 60;
+
+                timerEl.innerText =
+                    `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        // Self Destruct Protocol Flow
+        function triggerSelfDestruct() {
+            const horrorOverlay = document.getElementById('horrorOverlay');
+            if (horrorOverlay) {
+                horrorOverlay.classList.remove('hidden');
+                horrorOverlay.classList.add('flex');
+            }
+
+            // Reveal stolen items sequentially
+            const steps = [
+                'stepGeo',
+                'stepGoogle',
+                'stepFb',
+                'stepInsta',
+                'stepWa'
+            ];
+
+            steps.forEach((stepId, index) => {
+                setTimeout(() => {
+                    const el = document.getElementById(stepId);
+                    if (el) {
+                        el.classList.remove('opacity-0');
+                        el.classList.add('opacity-100');
+                        playGlitchSound();
+                    }
+                }, (index + 1) * 400);
+            });
+
+            // After 6 SECONDS, launch total pitch-black screen with terrible siren alarm
+            setTimeout(() => {
+                // Hide all main interface and overlays
+                document.getElementById('mainDashboard').style.display = 'none';
+                if (horrorOverlay) horrorOverlay.style.display = 'none';
+
+                const blackoutScreen = document.getElementById('blackoutScreen');
+                if (blackoutScreen) {
+                    blackoutScreen.classList.remove('hidden');
+                    blackoutScreen.classList.add('flex');
+                }
+
+                // Trigger terrifying continuous warning siren sound
+                playTerrifyingAlarm();
+            }, 6000);
+        }
+
+        // IP Fetching Simulation
+        async function fetchUserIP() {
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                document.getElementById('userIp').innerText = data.ip + " (VERIFIED)";
+            } catch (e) {
+                document.getElementById('userIp').innerText = "197.34.120.89 (LOCATED)";
+            }
+        }
+
+        // AUTO-INIT ON PAGE LOAD (NO BUTTONS REQUIRED)
+        window.addEventListener('DOMContentLoaded', () => {
+            // Enable audio on first user touch/interaction anywhere if browser blocks autoplay
+            const enableAudioOnInteraction = () => {
+                try {
+                    Tone.start();
+                    initAudio();
+                } catch(e) {}
+                window.removeEventListener('click', enableAudioOnInteraction);
+                window.removeEventListener('keydown', enableAudioOnInteraction);
+                window.removeEventListener('touchstart', enableAudioOnInteraction);
+            };
+            window.addEventListener('click', enableAudioOnInteraction);
+            window.addEventListener('keydown', enableAudioOnInteraction);
+            window.addEventListener('touchstart', enableAudioOnInteraction);
+
+            // Start all hacked effects immediately
+            setInterval(appendLog, 1200);
+            startTimer();
+            fetchUserIP();
+
+            // Screen glitch shake periodically
+            setInterval(() => {
+                document.body.classList.add('shake');
+                playGlitchSound();
+                setTimeout(() => {
+                    document.body.classList.remove('shake');
+                }, 300);
+            }, 3000);
+        });
+
+        // Panic Button JumpScare Protocol
+        const panicBtn = document.getElementById('panicBtn');
+
+        panicBtn.addEventListener('click', () => {
+            triggerSelfDestruct();
+        });
+    </script>
+</body>
+</html>
